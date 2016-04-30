@@ -9,6 +9,8 @@ import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.List;
 
+// wang jue da sb
+
 public class DBproj1 {
 	private static void init(String fname){//initialize
 		List<String> dataList=new ArrayList<String>();
@@ -36,7 +38,6 @@ public class DBproj1 {
 		
 		int[][] table;
 		int[] vector = new int[n];
-		
 		while(true){
 			BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 			System.out.println("topk>");
