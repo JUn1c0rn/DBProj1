@@ -11,6 +11,12 @@ import java.util.List;
 public class DBproj1 {
 	public static void main(String[] args){
 		String command;
+		int k, n;
+		k = Integer.parseInt(args[0]);
+		n = Integer.parseInt(args[1]);
+		
+		int[] vector = new int[n];
+		
 		while(true){
 			System.out.println("topk>");
 		}
@@ -26,5 +32,11 @@ public class DBproj1 {
 	
 	private void run2(){//Naive priority algorithm
 		
+	}
+	
+	private int fv(){
+		int result = 0;
+		
+		return result;
 	}
 }
