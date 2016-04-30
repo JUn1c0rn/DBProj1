@@ -8,7 +8,12 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 public class DBproj1 {
 	private static List<String> init(String fname){//initialize
@@ -44,16 +49,51 @@ public class DBproj1 {
 		
 	}
 	
-	private static List run2(int[][] table, int[] vector){//Naive priority algorithm
-		List resList = null;
+	private static int[] run2(int[][] table, int[] vector, int k){//Naive priority algorithm
+		int farray[] = null;
+		farray = new int[table.length];
 		
-		return resList;
+		for(int i = 0; i < table.length; i++){
+				farray[i] = fv(table[i], vector);
+		}
+		
+		HashMap<String, Integer> map = new HashMap<String, Integer>();
+		
+		for(int i = 0; i < table.length; i++){
+			farray[i] = fv(table[i], vector);
+			map.put(Integer.toString(i), farray[i]);
+	    }
+       
+        //将map.entrySet()转换成list  
+        List<Map.Entry<String, Integer>> list = new ArrayList<Map.Entry<String, Integer>>(map.entrySet());  
+       
+        Collections.sort(list, new Comparator<Map.Entry<String, Integer>>() {  
+            //降序排序  
+            @Override  
+            public int compare(Entry<String, Integer> o1, Entry<String, Integer> o2) {  
+                //return o1.getValue().compareTo(o2.getValue());  
+                return o2.getValue().compareTo(o1.getValue());  
+            }  
+        });  
+        
+    	int i = 0;
+        int sortedId[] = new int[table.length];
+
+        for (Map.Entry<String, Integer> mapping : list) { 
+       	       //System.out.println(mapping.getKey() + ":" + mapping.getValue()); 
+       	       sortedId[i] = Integer.parseInt(mapping.getKey());
+       	       i++;   	       
+        	}
+        return sortedId;
+
 	}
 	
 	private static int fv(int[] attr, int[] vector){
-		int result = 0;
-		
-		return result;
+		int sum = 0;	
+		for (int i = 0; i < vector.length; i++) {
+		        sum += attr[i+1] * vector[i];
+		}		
+		return sum;
 	}
 	
 	public static void main(String[] args){
@@ -64,7 +104,7 @@ public class DBproj1 {
 		//k = Integer.parseInt(args[0]);
 		//n = Integer.parseInt(args[1]);
 		k=5;
-		n=10;
+		n=5;
 		int[][] table = null;
 		int[] vector = new int[n];
 		while(true){
@@ -125,7 +165,17 @@ public class DBproj1 {
 						vector[i] = Integer.parseInt(commandline[i+1]);
 					}
 				}
-				List reslist = run2(table, vector);
+				int[] sortedId = run2(table, vector, k);
+				for(int i=0; i<table[0].length; i++){
+					System.out.print(arrtibutes[i]+"\t");
+				}
+				System.out.print("\n");
+				for(int m=0; m<k;m++){
+		        	  for(int q=0;q<table[0].length;q++){
+		        		  System.out.print(table[sortedId[m]][q]+"\t");  		  
+		        	  }
+		    		  System.out.print("\n");   		          	  
+		         } 
 			}else if (commandline[0].equals("exit")) {
 				break;
 			}
