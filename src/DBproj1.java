@@ -9,6 +9,8 @@ import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.List;
 
+
+//alsdkfjzzzzzzzzzzzzzzzzzzzzzzzzzzz
 //alskdfjlasdkjflkasdfjlk
 public class DBproj1 {
 	private static void init(String fname){//initialize
