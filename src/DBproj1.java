@@ -44,8 +44,10 @@ public class DBproj1 {
 		
 	}
 	
-	private static void run2(int[][] table, int[] vector){//Naive priority algorithm
+	private static List run2(int[][] table, int[] vector){//Naive priority algorithm
+		List resList = null;
 		
+		return resList;
 	}
 	
 	private static int fv(int[] attr, int[] vector){
@@ -67,7 +69,7 @@ public class DBproj1 {
 		int[] vector = new int[n];
 		while(true){
 			BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-			System.out.println("topk>");
+			System.out.print("topk>");
 			try{
 				command = br.readLine();
 			}catch(IOException e){
@@ -108,9 +110,9 @@ public class DBproj1 {
 						}
 					}
 				}
-				//for(int i=0; i<row; i++){
-					//System.out.println(strees[0].get(String.valueOf(table[i][1])));
-				//}
+				/*for(int i=0; i<col-1; i++){
+					System.out.println(strees[i].size());
+				}*/
 				
 			}else if(commandline[0].equals("run1")){
 				
@@ -123,6 +125,7 @@ public class DBproj1 {
 						vector[i] = Integer.parseInt(commandline[i+1]);
 					}
 				}
+				List reslist = run2(table, vector);
 			}else if (commandline[0].equals("exit")) {
 				break;
 			}
