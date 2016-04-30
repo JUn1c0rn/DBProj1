@@ -10,8 +10,30 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DBproj1 {
-	private static void init(String fname){//initialize
+	private static List init(String fname){//initialize
 		List<String> dataList=new ArrayList<String>();
+		
+		BufferedReader br=null;
+        try { 
+            br = new BufferedReader(new FileReader(fname));
+            String line = "";
+            br.readLine();
+            while ((line = br.readLine()) != null) { 
+                dataList.add(line);
+            }
+        }catch (Exception e) {
+        }finally{
+            if(br!=null){
+                try {
+                    br.close();
+                    br=null;
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        
+        return dataList;
 	}
 	
 	private static void run1(){//Threshold Algorithm
@@ -58,6 +80,8 @@ public class DBproj1 {
 						vector[i] = Integer.parseInt(commandline[i+1]);
 					}
 				}
+			}else if (commandline[0].equals("exit")) {
+				break;
 			}
 		}
 	}
