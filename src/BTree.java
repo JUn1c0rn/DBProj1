@@ -150,7 +150,6 @@ public class BTree<Key extends Comparable<Key>, Value>  {
 
    /*************************************************************************
     *  test client
-    *************************************************************************/
     /*public static void main(String[] args) {
         BTree<String, String> st = new BTree<String, String>();
 
