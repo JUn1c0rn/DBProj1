@@ -11,11 +11,11 @@ public class DBproj1 {
 		
 	}
 	
-	private void run1(){//Threshhold
+	private void run1(){//Threshold Algorithm
 		
 	}
 	
-	private void run2(){
+	private void run2(){//Naive priority algorithm
 		
 	}
 }
