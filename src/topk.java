@@ -1,5 +1,5 @@
 
-public class BTree<Key extends Comparable<Key>, Value>  {
+public class topk<Key extends Comparable<Key>, Value>  {
     private static final int M = 4;    // max children per B-tree node = M-1
 
     private Node root;             // root of the B-tree
@@ -27,7 +27,7 @@ public class BTree<Key extends Comparable<Key>, Value>  {
     }
 
     // constructor
-    public BTree() { root = new Node(0); }
+    public topk() { root = new Node(0); }
 
     // return number of key-value pairs in the B-tree
     public int size() { return N; }
