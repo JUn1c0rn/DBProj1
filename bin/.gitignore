@@ -7,6 +7,12 @@
 /topk$Entry.class
 /topk$Node.class
 /topk.class
+<<<<<<< HEAD
 =======
 /.DS_Store
 >>>>>>> Stashed changes
+=======
+/Btree$Entry.class
+/Btree$Node.class
+/Btree.class
+>>>>>>> origin/master
