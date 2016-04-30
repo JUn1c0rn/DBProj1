@@ -8,10 +8,14 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.List;
+<<<<<<< HEAD
 
 
 //alsdkfjzzzzzzzzzzzzzzzzzzzzzzzzzzz
 //alskdfjlasdkjflkasdfjlk
+=======
+//dfjklljsaf;fdasf;k
+>>>>>>> origin/master
 public class DBproj1 {
 	private static void init(String fname){//initialize
 		List<String> dataList=new ArrayList<String>();
