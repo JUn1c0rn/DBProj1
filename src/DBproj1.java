@@ -8,13 +8,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.List;
-<<<<<<< HEAD
-//tian ye super sb
-=======
 
-// wang jue da sb
-
->>>>>>> origin/master
 public class DBproj1 {
 	private static void init(String fname){//initialize
 		List<String> dataList=new ArrayList<String>();
