@@ -22,7 +22,7 @@ public class DBproj1 {
 		
 	}
 	
-	private static int fv(){
+	private static int fv(int[] attr, int[] vector){
 		int result = 0;
 		
 		return result;
