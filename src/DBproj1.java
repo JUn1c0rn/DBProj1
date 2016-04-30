@@ -7,8 +7,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
-///asdlfjlaksdfjlkasdjflk
 
 public class DBproj1 {
 	private static void init(String fname){//initialize
@@ -21,12 +21,23 @@ public class DBproj1 {
 	
 	private static void run2(int[][] table, int[] vector){//Naive priority algorithm
 		
+		int farray[] = {};
+		
+		for(int i = 0; i < table.length; i++){
+				farray[i] = fv(table[i], vector);
+		}
+		
+	    Arrays.sort(farray);
+		
 	}
 	
 	private static int fv(int[] attr, int[] vector){
-		int result = 0;
 		
-		return result;
+		int sum = 0;	
+		for (int i = 0; i < attr.length; i++) {
+		        sum += attr[i] * vector[i];
+		    }		
+		return sum;
 	}
 	
 	public static void main(String[] args){
