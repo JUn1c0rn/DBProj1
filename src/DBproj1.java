@@ -18,7 +18,7 @@ public class DBproj1 {
 		
 	}
 	
-	private static void run2(){//Naive priority algorithm
+	private static void run2(int[][] table, int[] vector){//Naive priority algorithm
 		
 	}
 	
@@ -34,6 +34,7 @@ public class DBproj1 {
 		k = Integer.parseInt(args[0]);
 		n = Integer.parseInt(args[1]);
 		
+		int[][] table;
 		int[] vector = new int[n];
 		
 		while(true){
@@ -47,6 +48,17 @@ public class DBproj1 {
 			String[] commandline = command.split(" ");
 			if (commandline[0].equals("init")) {
 				init(commandline[1]);
+			}else if(commandline[0].equals("run1")){
+				
+			}else if(commandline[0].equals("run2")){
+				int len = commandline.length;
+				if (len-1 != n) {
+					System.out.println("Error: not enough values\n");
+				}else{
+					for(int i=0; i<n; i++){
+						vector[i] = Integer.parseInt(commandline[i+1]);
+					}
+				}
 			}
 		}
 	}
