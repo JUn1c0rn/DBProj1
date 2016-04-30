@@ -6,4 +6,16 @@ public class DBproj1 {
 			System.out.println("topk>");
 		}
 	}
+	
+	private void init(){//initialize
+		
+	}
+	
+	private void run1(){//Threshhold
+		
+	}
+	
+	private void run2(){
+		
+	}
 }
