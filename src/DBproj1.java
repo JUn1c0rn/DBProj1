@@ -51,7 +51,7 @@ public class DBproj1 {
 		int vecLen = vector.length;
 		int numBtrees = Btrees.length;
 		int K = TopK;
-		int MaximumLine = 8000;
+		int MaximumLine = 8350;
 		int rowIdInt = 0;
 		int fvResult = 0;
 		int threshold = 0;
@@ -69,10 +69,13 @@ public class DBproj1 {
 		for(int j = 1; j <= MaximumLine; j++){//for how many lines
 			//computer the threshold
 			for(int i = 0; i < vector.length; i++){
-				threshold += vector[i]*Table[Integer.parseInt(Btrees[i].getRowId(j, Btrees[i].getRoot(), Btrees[i].height()))][j+1];
+				rowIdInt = Integer.parseInt(Btrees[i].getRowId(j, Btrees[i].getRoot(), Btrees[i].height()));
+				System.out.println(rowIdInt+" and "+"");
+				threshold += vector[i]*Table[rowIdInt][i+1];
 			}
 			for(int i = 0; i < vector.length; i++){
 				rowIdInt = Integer.parseInt(Btrees[i].getRowId(j, Btrees[i].getRoot(), Btrees[i].height()));
+				//have pro
 				fvResult = fv(Table[rowIdInt],vector);
 				if(queueTopK.size() < K){
 					queueTopK.put(fvResult, rowIdInt);
@@ -155,8 +158,9 @@ public class DBproj1 {
 	}
 	
 	public static void main(String[] args){
+
 		String command = null;
-		String[] arrtibutes = null;
+		String[] attributes = null;
 		
 		int k, n;
 		//k = Integer.parseInt(args[0]);
@@ -165,78 +169,104 @@ public class DBproj1 {
 		n=5;
 		int[][] table = null;
 		int[] vector = new int[n];
-		while(true){
-			BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-			System.out.print("topk>");
-			try{
-				command = br.readLine();
-			}catch(IOException e){
+		
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		System.out.print("topk>");
+		try{
+			command = br.readLine();
+		}catch(IOException e){
 				
-			}
-			String[] commandline = command.split(" ");
-			
-			int row=0, col=0;
-			if (commandline[0].equals("init")) {
-				String filename = "/Users/JUnicorn/Documents/workspace/DBProj1/src/NBA.csv";
-				List<String> dataList = init(filename);
-				if(dataList!=null && !dataList.isEmpty()){
-					//System.out.println(command);
-		            row = dataList.size()-1;
-		            arrtibutes = dataList.get(0).split(",");
-		            col = arrtibutes.length;
-		            table = new int[row][col];
-		            for(int i=0; i<row; i++){
-		            	String[] tuple = dataList.get(i+1).split(",");
-		            	for(int j=0; j<col; j++){
-		            		table[i][j] = Integer.parseInt(tuple[j]);
-		            		//System.out.println(table[i][j]);
-		            	}
+		}
+		String[] commandline = command.split(" ");
+		int row=0, col=0;
+		if (commandline[0].equals("init")) {
+			String filename = "src/"+commandline[1];
+			List<String> dataList = init(filename);
+			if(dataList!=null && !dataList.isEmpty()){
+				//System.out.println(command);
+		        row = dataList.size()-1;
+		        attributes = dataList.get(0).split(",");
+		        col = attributes.length;
+		        table = new int[row][col];
+		        for(int i=0; i<row; i++){
+		        	String[] tuple = dataList.get(i+1).split(",");
+		            for(int j=0; j<col; j++){
+		            	table[i][j] = Integer.parseInt(tuple[j]);
+		            	//System.out.println(table[i][j]);
 		            }
 		        }
-				
-				Btree<String, String> ptree = new Btree<String, String>();
-				Btree<String, String>[] strees=new Btree[col-1];
-				for(int tt=0; tt<col-1; tt++){
-					strees[tt] = new Btree<String, String>();
-				}
-				for(int i=0; i<row; i++){
-					for(int j=0; j<col; j++){
-						if(j==0){
-							ptree.put(String.valueOf(table[i][j]), String.valueOf(i));
-						}else{
-							strees[j-1].put(String.valueOf(table[i][j]), String.valueOf(table[i][0]));
-						}
+		   }
+			Btree<String, String> ptree = new Btree<String, String>();
+			Btree<String, String>[] strees = new Btree[col-1];
+			for(int tt=0; tt<col-1; tt++){
+				strees[tt] = new Btree<String, String>();
+			}
+			for(int i=0; i<row; i++){
+				for(int j=0; j<col; j++){
+					if(j==0){
+						ptree.put(String.valueOf(table[i][j]), String.valueOf(i));
+					}else{
+						strees[j-1].put(String.valueOf(table[i][j]), String.valueOf(table[i][0]));
 					}
 				}
+			}
 				/*for(int i=0; i<col-1; i++){
 					System.out.println(strees[i].size());
 				}*/
-				
-			}else if(commandline[0].equals("run1")){
-				
-			}else if(commandline[0].equals("run2")){
-				int len = commandline.length;
-				if (len-1 != n) {
-					System.out.println("Error: not enough values\n");
-				}else{
-					for(int i=0; i<n; i++){
-						vector[i] = Integer.parseInt(commandline[i+1]);
+			while(true){
+				System.out.println("Start...");
+				System.out.print("topk>");
+				try{
+					command = br.readLine();
+				}catch(IOException e){
+						
+				}
+				commandline = command.split(" ");
+				if(commandline[0].equals("run1")){
+					int len = commandline.length;
+					/*
+					for (int i=0; i<len; i++){
+						System.out.println(commandline[i]);
 					}
+					if (len-1 != n) {
+						System.out.println("Error: not enough values\n");
+					}else{
+						for(int i=0; i<n; i++){
+							vector[i] = Integer.parseInt(commandline[i+1]);
+						}
+					}
+					*/
+					for (int i=0; i<len-1; i++){
+						vector[i] = Integer.parseInt(commandline[i+1]);
+						//System.out.println(vector[i]);
+					}
+					PrintTopK(run1(table, vector, strees, k), table, attributes, k);
+				}else if(commandline[0].equals("run2")){
+					int len = commandline.length;
+					if (len-1 != n) {
+						System.out.println("Error: not enough values\n");
+					}else{
+						for(int i=0; i<n; i++){
+							vector[i] = Integer.parseInt(commandline[i+1]);
+						}
+					}
+					PrintTopK(run2(table, vector, k), table, attributes, k);
+				}else if (commandline[0].equals("exit")) {
+					break;
 				}
-				int[] sortedId = run2(table, vector, k);
-				for(int i=0; i<table[0].length; i++){
-					System.out.print(arrtibutes[i]+"\t");
-				}
-				System.out.print("\n");
-				for(int m=0; m<k;m++){
-		        	  for(int q=0;q<table[0].length;q++){
-		        		  System.out.print(table[sortedId[m]][q]+"\t");  		  
-		        	  }
-		    		  System.out.print("\n");   		          	  
-		         } 
-			}else if (commandline[0].equals("exit")) {
-				break;
 			}
 		}
+	}
+	public static void PrintTopK (int[] sortedId, int [][] table, String [] attributes, int k){
+		for(int i=0; i<table[0].length; i++){
+			System.out.print(attributes[i]+"\t");
+		}
+		System.out.print("\n");
+		for(int m=0; m<k;m++){
+        	  for(int q=0;q<table[0].length;q++){
+        		  System.out.print(table[sortedId[m]][q]+"\t");  		  
+        	  }
+    		  System.out.print("\n");   		          	  
+         } 		
 	}
 }

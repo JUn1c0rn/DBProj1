@@ -5,7 +5,7 @@ public class Btree<Key extends Comparable<Key>, Value>  {
     private Node root;             // root of the B-tree
     private int HT;                // height of the B-tree
     private int N;                 // number of key-value pairs in the B-tree
-    private int Sequence;
+    private int Sequence;          // help to find the top Xth in current B-tree
     // helper B-tree node data type
     private static final class Node {
         private int m;                             // number of children
@@ -27,7 +27,11 @@ public class Btree<Key extends Comparable<Key>, Value>  {
     }
 
     // constructor
-    public Btree() { root = new Node(0); }
+    public Btree() { 
+    	root = new Node(0); 
+    	Sequence = 0;
+    	HT = 0;
+    	}
 
     // return number of key-value pairs in the B-tree
     public int size() { return N; }
@@ -35,7 +39,9 @@ public class Btree<Key extends Comparable<Key>, Value>  {
     // return height of B-tree
     public int height() { return HT; }
 
-
+    public Node getRoot(){
+    	return root;
+    }
     // search for given key, return associated value; return null if no such key
     public Value get(Key key) { return search(root, key, HT); }
     private Value search(Node x, Key key, int ht) {
@@ -103,6 +109,7 @@ public class Btree<Key extends Comparable<Key>, Value>  {
         h.children[j] = t;
         h.m++;
         if (h.m < M) return null;
+       
         else         return split(h);
     }
 
@@ -136,7 +143,17 @@ public class Btree<Key extends Comparable<Key>, Value>  {
         }
         return s;
     }
-  //pjm get the No.X element in Attribute Btree Ai
+
+
+    // comparison functions - make Comparable instead of Key to avoid casts
+    private boolean less(Comparable k1, Comparable k2) {
+        return k1.compareTo(k2) < 0;
+    }
+
+    private boolean eq(Comparable k1, Comparable k2) {
+        return k1.compareTo(k2) == 0;
+    }
+    //pjm get the No.X element in Attribute Btree Ai
     public void setSequence (int sequence){
     	this.Sequence = sequence;
     }
@@ -144,8 +161,9 @@ public class Btree<Key extends Comparable<Key>, Value>  {
 		String rowId = null;
     	if(ht == 0){
 			if(sequence <= node.m){
-				return (String)node.children[node.m - sequence].value;
+				return (String)node.children[node.m - sequence-1].value;
 			}else {
+				//System.out.println("2, "+sequence + " "+node.m);
 				Sequence -= node.m;
 				return null;
 			}
@@ -158,14 +176,8 @@ public class Btree<Key extends Comparable<Key>, Value>  {
 		}
 		return rowId;
 	}
-
-    // comparison functions - make Comparable instead of Key to avoid casts
-    private boolean less(Comparable k1, Comparable k2) {
-        return k1.compareTo(k2) < 0;
+    private int findRowId(int sequence, Node node){
+    	
+    	return 0;
     }
-
-    private boolean eq(Comparable k1, Comparable k2) {
-        return k1.compareTo(k2) == 0;
-    }
-
 }
