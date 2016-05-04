@@ -5,7 +5,7 @@ public class Btree<Key extends Comparable<Key>, Value>  {
     private Node root;             // root of the B-tree
     private int HT;                // height of the B-tree
     private int N;                 // number of key-value pairs in the B-tree
-
+    private int Sequence;
     // helper B-tree node data type
     private static final class Node {
         private int m;                             // number of children
@@ -136,7 +136,28 @@ public class Btree<Key extends Comparable<Key>, Value>  {
         }
         return s;
     }
-
+  //pjm get the No.X element in Attribute Btree Ai
+    public void setSequence (int sequence){
+    	this.Sequence = sequence;
+    }
+    public String getRowId(int sequence, Node node, int ht){
+		String rowId = null;
+    	if(ht == 0){
+			if(sequence <= node.m){
+				return (String)node.children[node.m - sequence].value;
+			}else {
+				Sequence -= node.m;
+				return null;
+			}
+		}
+		else {
+			for(int i=node.m-1; i>=0; i--){
+				rowId = getRowId(Sequence, node.children[i].next, ht-1);
+				if(rowId != null) break;
+			}
+		}
+		return rowId;
+	}
 
     // comparison functions - make Comparable instead of Key to avoid casts
     private boolean less(Comparable k1, Comparable k2) {
