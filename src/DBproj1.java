@@ -45,10 +45,66 @@ public class DBproj1 {
         return dataList;
 	}
 	
-	private static void run1(){//Threshold Algorithm
+	private static int[] run1(int [][] Table, int[] vector, Btree [] Btrees, int TopK){//Threshold Algorithm
+		int vecLen = vector.length;
+		int numBtrees = Btrees.length;
+		int K = TopK;
+		int MaximumLine = 8000;
+		int rowIdInt = 0;
+		int fvResult = 0;
+		int threshold = 0;
+		int []rowIds = new int[K];
+		TreeMap<Integer, Integer> queueTopK = new TreeMap<Integer, Integer>();
+		//for i from 0 to numBtrees - 1, 
+		//	find the first unchecked object j in Btrees[i]
+		//	find the position/rowId of object j in Btree of Id
+		//	according to the rowId to find object in Table,and find the int[] attr
+		// 	calculate the  fv(int[] attr, int[] vector)
+		//	compare with candidate in queueTopK, and insert if necessary
+		//calculate the Threshold in the Iteration m by using fv(int[] attr, int[] vector)
+		// on the line m, and compare each value in queueTopK
+		//if all value are bigger or equal to Threshold, then return the topK rowId in int[]
+		for(int j = 1; j <= MaximumLine; j++){//for how many lines
+			//computer the threshold
+			for(int i = 0; i < vector.length; i++){
+				threshold += vector[i]*Table[Integer.parseInt(Btrees[i].getRowId(j, Btrees[i].getRoot(), Btrees[i].height()))][j+1];
+			}
+			for(int i = 0; i < vector.length; i++){
+				rowIdInt = Integer.parseInt(Btrees[i].getRowId(j, Btrees[i].getRoot(), Btrees[i].height()));
+				fvResult = fv(Table[rowIdInt],vector);
+				if(queueTopK.size() < K){
+					queueTopK.put(fvResult, rowIdInt);
+				}
+				if(queueTopK.size() == K){
+					if(queueTopK.firstKey()>threshold){
+						//return these rowId;
+						Iterator it = queueTopK.keySet().iterator();
+						int iteInt = K-1;
+						while(it.hasNext()){
+							rowIds[iteInt--] = queueTopK.get(it.next());
+						}
+						return rowIds;
+					}
+					//compare the last key of the queueTopK
+					if(queueTopK.firstKey()<fvResult){
+						queueTopK.remove(queueTopK.firstKey());
+						queueTopK.put(fvResult, rowIdInt);
+					}
+					if(queueTopK.firstKey()>threshold){
+						//return these rowId;
+						Iterator it = queueTopK.keySet().iterator();
+						int iteInt = K-1;
+						while(it.hasNext()){
+							rowIds[iteInt--] = queueTopK.get(it.next());
+						}
+						return rowIds;
+					}
+				}
+			}
+		}
+		return rowIds;
 		
 	}
-	
 	private static int[] run2(int[][] table, int[] vector, int k){//Naive priority algorithm
 		int farray[] = null;
 		farray = new int[table.length];
