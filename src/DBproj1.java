@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
@@ -56,7 +57,7 @@ public class DBproj1 {
 		int fvResult = 0;
 		int threshold = 0;
 		int []rowIds = new int[K];
-		TreeMap<Integer, Integer> queueTopK = new TreeMap<Integer, Integer>();
+		Map<Integer, Integer> queueTopK = new HashMap<Integer, Integer>();
 		//for i from 0 to numBtrees - 1, 
 		//	find the first unchecked object j in Btrees[i]
 		//	find the position/rowId of object j in Btree of Id
@@ -66,49 +67,103 @@ public class DBproj1 {
 		//calculate the Threshold in the Iteration m by using fv(int[] attr, int[] vector)
 		// on the line m, and compare each value in queueTopK
 		//if all value are bigger or equal to Threshold, then return the topK rowId in int[]
+		//System.out.println(queueTopK.size());
+		
+		
+		try{
+			File writename = new File("src/log.txt");
+			BufferedWriter out = new BufferedWriter( new FileWriter(writename));
+			out.write("vector lenght is "+vector.length+"\n");
 		for(int j = 1; j <= MaximumLine; j++){//for how many lines
 			//computer the threshold
-			for(int i = 0; i < vector.length; i++){
-				rowIdInt = Integer.parseInt(Btrees[i].getRowId(j, Btrees[i].getRoot(), Btrees[i].height()));
-				System.out.println(rowIdInt+" and "+"");
-				threshold += vector[i]*Table[rowIdInt][i+1];
-			}
+			threshold = 0;
+			
+				for(int i = 0; i < vector.length; i++){
+					out.write(Btrees[i].size());
+					rowIdInt = Integer.parseInt(Btrees[i].getRowId(j-1, Btrees[i].getRoot(), Btrees[i].height()));
+					//System.out.println(rowIdInt+" and "+"");
+					threshold += vector[i]*Table[rowIdInt][i+1];
+					//out.write("#"+i+" Threshold now is "+threshold+"\n");
+				}
+				out.write("#"+j+" Threshold is "+threshold+"\n");
+				out.flush();
+		
 			for(int i = 0; i < vector.length; i++){
 				rowIdInt = Integer.parseInt(Btrees[i].getRowId(j, Btrees[i].getRoot(), Btrees[i].height()));
 				//have pro
 				fvResult = fv(Table[rowIdInt],vector);
 				if(queueTopK.size() < K){
-					queueTopK.put(fvResult, rowIdInt);
+					queueTopK.put(rowIdInt, fvResult);
+					//System.out.println(queueTopK.size());
+					//System.out.println("put "+rowIdInt+", "+fvResult+" into TopK queue");
 				}
 				if(queueTopK.size() == K){
-					if(queueTopK.firstKey()>threshold){
-						//return these rowId;
-						Iterator it = queueTopK.keySet().iterator();
+					//find the (key, value) with the smallest value
+					//compare with the threshold
+					//if larger than threshold, sort, store into rowIds. and return it.
+					//if the smallest < fvResult, remove it, and put (rowIdInt, fvResult) into Hashmap
+					//if larger than threshold, sort, store into rowIds. and return it.
+					//reference:http://blog.csdn.net/tjcyjd/article/details/11111401
+					//reference:http://www.cnblogs.com/hxsyl/p/3331095.html
+					List<Map.Entry<Integer, Integer>> list = new ArrayList<Map.Entry<Integer, Integer>>(queueTopK.entrySet());
+					if(SmallestValue(queueTopK)>= threshold){
+						//sort(queueTopK)
+						Collections.sort(list, new Comparator<Map.Entry<Integer, Integer>>(){
+							public int compare(Entry<Integer, Integer>o1, Entry<Integer, Integer>o2){
+								return o1.getValue() - o2.getValue();
+							}});
 						int iteInt = K-1;
-						while(it.hasNext()){
-							rowIds[iteInt--] = queueTopK.get(it.next());
+						for(Integer key: queueTopK.keySet()){
+							rowIds[iteInt--] = key;
 						}
 						return rowIds;
 					}
-					//compare the last key of the queueTopK
-					if(queueTopK.firstKey()<fvResult){
-						queueTopK.remove(queueTopK.firstKey());
-						queueTopK.put(fvResult, rowIdInt);
+					if(SmallestValue(queueTopK)<fvResult){
+						queueTopK.remove(KeyWithSmallestValue(queueTopK));
+						queueTopK.put(rowIdInt, fvResult);
 					}
-					if(queueTopK.firstKey()>threshold){
-						//return these rowId;
-						Iterator it = queueTopK.keySet().iterator();
+					if(SmallestValue(queueTopK)>= threshold){
+						//sort(queueTopK)
+						Collections.sort(list, new Comparator<Map.Entry<Integer, Integer>>(){
+							public int compare(Entry<Integer, Integer>o1, Entry<Integer, Integer>o2){
+								return o1.getValue() - o2.getValue();
+							}});
 						int iteInt = K-1;
-						while(it.hasNext()){
-							rowIds[iteInt--] = queueTopK.get(it.next());
+						for(Integer key: queueTopK.keySet()){
+							rowIds[iteInt--] = key;
 						}
 						return rowIds;
 					}
 				}
 			}
 		}
+		out.close();
+		}catch(Exception e){
+			e.printStackTrace();
+		}
 		return rowIds;
-		
+	}
+ 
+	private static int SmallestValue(Map<Integer, Integer> hashmap){
+		int small = 100000;
+		for(Integer value: hashmap.values()){
+			if(value <  small){
+				small = value;
+			}
+		}
+		return small;
+	}
+	
+	private static int KeyWithSmallestValue(Map<Integer, Integer> hashmap){
+		int small = 100000;
+		int key = 0;
+		for(Map.Entry<Integer, Integer> entry: hashmap.entrySet()){
+			if(entry.getValue()<small){
+				small = entry.getValue();
+				key = entry.getKey();
+			}
+		}
+		return key;
 	}
 	private static int[] run2(int[][] table, int[] vector, int k){//Naive priority algorithm
 		int farray[] = null;

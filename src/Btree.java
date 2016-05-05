@@ -1,3 +1,9 @@
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 public class Btree<Key extends Comparable<Key>, Value>  {
     private static final int M = 4;    // max children per B-tree node = M-1
@@ -6,6 +12,13 @@ public class Btree<Key extends Comparable<Key>, Value>  {
     private int HT;                // height of the B-tree
     private int N;                 // number of key-value pairs in the B-tree
     private int Sequence;          // help to find the top Xth in current B-tree
+    
+    
+    private File file;
+    private BufferedWriter fileout;
+    private final ReadWriteLock lock = new ReentrantReadWriteLock();
+    private final Lock readLock = lock.readLock();
+    private final Lock writeLock = lock.writeLock();
     // helper B-tree node data type
     private static final class Node {
         private int m;                             // number of children
@@ -31,6 +44,12 @@ public class Btree<Key extends Comparable<Key>, Value>  {
     	root = new Node(0); 
     	Sequence = 0;
     	HT = 0;
+    	file = new File("src/btree.txt");
+    	try{
+    		fileout = new BufferedWriter(new FileWriter(file));
+    	}catch(Exception e){
+    		e.printStackTrace();
+    	}
     	}
 
     // return number of key-value pairs in the B-tree
@@ -159,8 +178,24 @@ public class Btree<Key extends Comparable<Key>, Value>  {
     }
     public String getRowId(int sequence, Node node, int ht){
 		String rowId = null;
+		try{
+			writeLock.lock();
+			try{
+				fileout.write("Level #"+ht+", Node's key is "+ node.children[node.m-1].key+", and sequence is "+sequence +"\n");
+				fileout.flush();
+			}finally{
+				writeLock.unlock();
+			}
+		
     	if(ht == 0){
 			if(sequence <= node.m){
+				writeLock.lock();
+				try{
+					fileout.write("return value "+node.children[node.m - sequence-1].value+"\n");
+					fileout.flush();
+				}finally{
+					writeLock.unlock();
+				}
 				return (String)node.children[node.m - sequence-1].value;
 			}else {
 				//System.out.println("2, "+sequence + " "+node.m);
@@ -171,8 +206,11 @@ public class Btree<Key extends Comparable<Key>, Value>  {
 		else {
 			for(int i=node.m-1; i>=0; i--){
 				rowId = getRowId(Sequence, node.children[i].next, ht-1);
-				if(rowId != null) break;
+				if(rowId != null) return rowId;
 			}
+		}
+			}catch(Exception e){
+				e.printStackTrace();
 		}
 		return rowId;
 	}
