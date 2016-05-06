@@ -1,20 +1,3 @@
-/.DS_Store
-/BTree$Entry.class
-/BTree$Node.class
-/BTree.class
-/DBproj1.class
-<<<<<<< Updated upstream
-/topk$Entry.class
-/topk$Node.class
-/topk.class
-<<<<<<< HEAD
-=======
-/.DS_Store
->>>>>>> Stashed changes
-=======
-/Btree$Entry.class
-/Btree$Node.class
-/Btree.class
->>>>>>> origin/master
-/NBA.csv
 /DBproj1$1.class
+/DBproj1$2.class
+/DBproj1$3.class

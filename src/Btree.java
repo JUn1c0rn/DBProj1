@@ -181,8 +181,11 @@ public class Btree<Key extends Comparable<Key>, Value>  {
 		try{
 			writeLock.lock();
 			try{
-				fileout.write("Level #"+ht+", Node's key is "+ node.children[node.m-1].key+", and sequence is "+sequence +"\n");
-				fileout.flush();
+				for(int i=node.m-1; i>=0;i--){
+					fileout.write("ht"+ht+"#"+ node.children[i].key+"se"+sequence +"\n");
+					fileout.flush();
+				}
+				
 			}finally{
 				writeLock.unlock();
 			}
@@ -191,7 +194,7 @@ public class Btree<Key extends Comparable<Key>, Value>  {
 			if(sequence <= node.m){
 				writeLock.lock();
 				try{
-					fileout.write("return value "+node.children[node.m - sequence-1].value+"\n");
+					fileout.write("@"+node.children[node.m - sequence-1].key+"\n"+"\n");
 					fileout.flush();
 				}finally{
 					writeLock.unlock();

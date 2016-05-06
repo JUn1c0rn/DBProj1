@@ -82,7 +82,8 @@ public class DBproj1 {
 					out.write(Btrees[i].size());
 					rowIdInt = Integer.parseInt(Btrees[i].getRowId(j-1, Btrees[i].getRoot(), Btrees[i].height()));
 					//System.out.println(rowIdInt+" and "+"");
-					threshold += vector[i]*Table[rowIdInt][i+1];
+					threshold += vector[i]*Table[rowIdInt][i+1];Btrees
+					
 					//out.write("#"+i+" Threshold now is "+threshold+"\n");
 				}
 				out.write("#"+j+" Threshold is "+threshold+"\n");
