@@ -16,9 +16,6 @@ public class Btree<Key extends Comparable<Key>, Value>  {
     
     private File file;
     private BufferedWriter fileout;
-    private final ReadWriteLock lock = new ReentrantReadWriteLock();
-    private final Lock readLock = lock.readLock();
-    private final Lock writeLock = lock.writeLock();
     // helper B-tree node data type
     private static final class Node {
         private int m;                             // number of children
@@ -166,50 +163,42 @@ public class Btree<Key extends Comparable<Key>, Value>  {
 
     // comparison functions - make Comparable instead of Key to avoid casts
     private boolean less(Comparable k1, Comparable k2) {
-        return k1.compareTo(k2) < 0;
+        return (Integer)k1 -(Integer)k2  < 0;
     }
 
     private boolean eq(Comparable k1, Comparable k2) {
-        return k1.compareTo(k2) == 0;
+        return (Integer)k1-(Integer)k2 == 0;
     }
     //pjm get the No.X element in Attribute Btree Ai
     public void setSequence (int sequence){
     	this.Sequence = sequence;
     }
-    public String getRowId(int sequence, Node node, int ht){
-		String rowId = null;
+    public int getRowId(int sequence, Node node, int ht){
+		int rowId = -1;
+		Sequence = sequence;
+		System.out.println(Sequence);
 		try{
-			writeLock.lock();
-			try{
 				for(int i=node.m-1; i>=0;i--){
-					fileout.write("ht"+ht+"#"+ node.children[i].key+"se"+sequence +"\n");
+					fileout.write("ht"+ht+"#"+ node.children[i].key+"se"+Sequence +"\n");
 					fileout.flush();
 				}
-				
-			}finally{
-				writeLock.unlock();
-			}
 		
     	if(ht == 0){
 			if(sequence <= node.m){
-				writeLock.lock();
-				try{
-					fileout.write("@"+node.children[node.m - sequence-1].key+"\n"+"\n");
+					fileout.write("@"+node.children[node.m - Sequence-1].key+"\n"+"\n");
 					fileout.flush();
-				}finally{
-					writeLock.unlock();
-				}
-				return (String)node.children[node.m - sequence-1].value;
+			
+				return (Integer)node.children[node.m - Sequence-1].value;
 			}else {
 				//System.out.println("2, "+sequence + " "+node.m);
 				Sequence -= node.m;
-				return null;
+				return -1;
 			}
 		}
 		else {
 			for(int i=node.m-1; i>=0; i--){
 				rowId = getRowId(Sequence, node.children[i].next, ht-1);
-				if(rowId != null) return rowId;
+				if(rowId != -1) return rowId;
 			}
 		}
 			}catch(Exception e){

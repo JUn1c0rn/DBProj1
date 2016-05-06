@@ -73,24 +73,27 @@ public class DBproj1 {
 		try{
 			File writename = new File("src/log.txt");
 			BufferedWriter out = new BufferedWriter( new FileWriter(writename));
-			out.write("vector lenght is "+vector.length+"\n");
+			//out.write("vector lenght is "+vector.length+"\n");
 		for(int j = 1; j <= MaximumLine; j++){//for how many lines
 			//computer the threshold
 			threshold = 0;
-			
-				for(int i = 0; i < vector.length; i++){
-					out.write(Btrees[i].size());
+			/*
+				for(int i = 0; i < vector.length; i++){	
+					//out.write(Btrees[i].size());
 					rowIdInt = Integer.parseInt(Btrees[i].getRowId(j-1, Btrees[i].getRoot(), Btrees[i].height()));
 					//System.out.println(rowIdInt+" and "+"");
-					threshold += vector[i]*Table[rowIdInt][i+1];Btrees
-					
+					threshold += vector[i]*Table[rowIdInt][i+1];
 					//out.write("#"+i+" Threshold now is "+threshold+"\n");
 				}
-				out.write("#"+j+" Threshold is "+threshold+"\n");
-				out.flush();
-		
+				//out.write("#"+j+" Threshold is "+threshold+"\n");
+				//out.flush();
+		*/
+			if(j==1){
+				rowIdInt = Btrees[0].getRowId(j-1, Btrees[0].getRoot(), Btrees[0].height());
+			}
+			
 			for(int i = 0; i < vector.length; i++){
-				rowIdInt = Integer.parseInt(Btrees[i].getRowId(j, Btrees[i].getRoot(), Btrees[i].height()));
+				rowIdInt = Btrees[i].getRowId(j, Btrees[i].getRoot(), Btrees[i].height());
 				//have pro
 				fvResult = fv(Table[rowIdInt],vector);
 				if(queueTopK.size() < K){
@@ -252,17 +255,17 @@ public class DBproj1 {
 		            }
 		        }
 		   }
-			Btree<String, String> ptree = new Btree<String, String>();
-			Btree<String, String>[] strees = new Btree[col-1];
+			Btree<Integer, Integer> ptree = new Btree<Integer, Integer>();
+			Btree<Integer, Integer>[] strees = new Btree[col-1];
 			for(int tt=0; tt<col-1; tt++){
-				strees[tt] = new Btree<String, String>();
+				strees[tt] = new Btree<Integer, Integer>();
 			}
 			for(int i=0; i<row; i++){
 				for(int j=0; j<col; j++){
 					if(j==0){
-						ptree.put(String.valueOf(table[i][j]), String.valueOf(i));
+						ptree.put(table[i][j],i);
 					}else{
-						strees[j-1].put(String.valueOf(table[i][j]), String.valueOf(table[i][0]));
+						strees[j-1].put(table[i][j], table[i][0]);
 					}
 				}
 			}
