@@ -15,6 +15,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.PrimitiveIterator;
 import java.util.Map.Entry;
 import java.util.TreeMap;
 
@@ -83,6 +84,10 @@ public class DBproj1 {
 					rowIdInt = Integer.parseInt(Btrees[i].getRowId(j-1, Btrees[i].getRoot(), Btrees[i].height()));
 					//System.out.println(rowIdInt+" and "+"");
 					threshold += vector[i]*Table[rowIdInt][i+1];
+<<<<<<< Updated upstream
+=======
+					
+>>>>>>> Stashed changes
 					//out.write("#"+i+" Threshold now is "+threshold+"\n");
 				}
 				//out.write("#"+j+" Threshold is "+threshold+"\n");
@@ -169,6 +174,7 @@ public class DBproj1 {
 		}
 		return key;
 	}
+	
 	private static int[] run2(int[][] table, int[] vector, int k){//Naive priority algorithm
 		int farray[] = null;
 		farray = new int[table.length];
@@ -215,6 +221,7 @@ public class DBproj1 {
 		}		
 		return sum;
 	}
+	
 	
 	public static void main(String[] args){
 
