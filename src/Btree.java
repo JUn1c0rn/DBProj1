@@ -176,16 +176,16 @@ public class Btree<Key extends Comparable<Key>, Value>  {
     public int getRowId(int sequence, Node node, int ht){
 		int rowId = -1;
 		Sequence = sequence;
-		System.out.println(Sequence);
 		try{
+			/*
 				for(int i=node.m-1; i>=0;i--){
-					fileout.write("ht"+ht+"#"+ node.children[i].key+"se"+Sequence +"\n");
+					fileout.write(Sequence +"\n");
 					fileout.flush();
 				}
-		
+				*/
     	if(ht == 0){
-			if(sequence <= node.m){
-					fileout.write("@"+node.children[node.m - Sequence-1].key+"\n"+"\n");
+			if(Sequence < node.m){
+					fileout.write("@"+(node.m - Sequence-1)+"\n");
 					fileout.flush();
 			
 				return (Integer)node.children[node.m - Sequence-1].value;
